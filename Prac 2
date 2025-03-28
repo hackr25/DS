@@ -1,0 +1,68 @@
+# Practical No. 2: Hypothesis Testing Problems
+
+# Q.1: Flower Stem Heights
+stem_heights <- c(63, 63, 66, 67, 68, 69, 70, 70, 71, 71)
+t.test(stem_heights, mu = 66)
+
+# Q.2: Student Test Marks
+student_marks <- c(50, 49, 52, 44, 45, 48, 46, 45, 49, 45)
+t.test(student_marks, mu = 50)
+
+# Q.3: IQ Test
+iq_scores <- c(70, 120, 110, 101, 88, 83, 95, 88, 107, 100)
+t.test(iq_scores, mu = 100)
+
+# Q.4: Miles per Gallon from mtcars
+library(datasets)
+t.test(mtcars$mpg, mu = 20)
+
+# Q.5: Weight Reduction Drugs
+drug_a <- c(10, 12, 13, 11, 14)
+drug_b <- c(8, 9, 12, 14, 15, 10, 9)
+t.test(drug_a, drug_b)
+
+# Q.6: Sales Before and After Campaign
+before_campaign <- c(53, 28, 31, 48, 50, 42)
+after_campaign <- c(58, 29, 30, 55, 56, 45)
+t.test(before_campaign, after_campaign, paired = TRUE)
+
+# Q.7: Survey Data - Chi-Square Test of Independence
+library(MASS)
+survey_data <- survey
+chisq.test(table(survey_data$Smoke, survey_data$Exer))
+
+# Q.8: mtcars - Chi-Square Test
+chisq.test(table(mtcars$cyl, mtcars$carb))
+
+# Q.9: Sport Preference by Gender
+sport_matrix <- matrix(c(
+  20, 40, 40,  # Men
+  60, 20, 20   # Women
+), nrow = 2, byrow = TRUE)
+chisq.test(sport_matrix)
+
+# Q.10: Handedness Heredity
+handedness_matrix <- matrix(c(
+  8, 10, 12,    # Left-handed children
+  178, 21, 21   # Right-handed children
+), nrow = 2, byrow = TRUE)
+chisq.test(handedness_matrix)
+
+# Q.11: Household Tasks
+household_tasks <- matrix(c(
+  156, 14, 2, 4,    # Laundry
+  124, 20, 5, 4,    # Main Meal
+  77, 11, 7, 13,    # Dinner
+  82, 36, 15, 7,    # Breakfast
+  53, 11, 1, 57,    # Tidying
+  32, 24, 4, 53,    # Dishes
+  33, 23, 9, 55,    # Shopping
+  12, 46, 23, 15,   # Official
+  10, 51, 75, 3,    # Driving
+  13, 13, 21, 66,   # Finances
+  8, 1, 53, 77,     # Insurance
+  0, 3, 160, 2,     # Repairs
+  0, 1, 6, 153      # Holidays
+), nrow = 13, byrow = TRUE)
+
+chisq.test(household_tasks)
