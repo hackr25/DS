@@ -32,12 +32,13 @@ survey_data <- survey
 chisq.test(table(survey_data$Smoke, survey_data$Exer))
 
 # Q.8: mtcars - Chi-Square Test
-chisq.test(table(mtcars$cyl, mtcars$carb))
+data=table(mtcars$cyl, mtcars$carb)
+chisq.test(data)
 
 # Q.9: Sport Preference by Gender
 sport_matrix <- matrix(c(
-  20, 40, 40,  # Men
-  60, 20, 20   # Women
+  35, 15, 50,  # Men
+  10, 30, 60   # Women
 ), nrow = 2, byrow = TRUE)
 chisq.test(sport_matrix)
 
@@ -48,21 +49,24 @@ handedness_matrix <- matrix(c(
 ), nrow = 2, byrow = TRUE)
 chisq.test(handedness_matrix)
 
-# Q.11: Household Tasks
-household_tasks <- matrix(c(
-  156, 14, 2, 4,    # Laundry
-  124, 20, 5, 4,    # Main Meal
-  77, 11, 7, 13,    # Dinner
-  82, 36, 15, 7,    # Breakfast
-  53, 11, 1, 57,    # Tidying
-  32, 24, 4, 53,    # Dishes
-  33, 23, 9, 55,    # Shopping
-  12, 46, 23, 15,   # Official
-  10, 51, 75, 3,    # Driving
-  13, 13, 21, 66,   # Finances
-  8, 1, 53, 77,     # Insurance
-  0, 3, 160, 2,     # Repairs
-  0, 1, 6, 153      # Holidays
-), nrow = 13, byrow = TRUE)
+| Task       | Wife | Alternating | Husband | Jointly |
+|------------|------|-------------|---------|---------|
+| Laundry    | 156  | 14          | 2       | 4       |
+| Main meal  | 124  | 20          | 5       | 4       |
+| Dinner     | 77   | 11          | 7       | 13      |
+| Breakfast  | 82   | 36          | 15      | 7       |
+| Tidying    | 53   | 11          | 1       | 57      |
+| Dishes     | 32   | 24          | 4       | 53      |
+| Shopping   | 33   | 23          | 9       | 55      |
+| Official   | 12   | 46          | 23      | 15      |
+| Driving    | 10   | 51          | 75      | 3       |
+| Finances   | 13   | 13          | 21      | 66      |
+| Insurance  | 8    | 1           | 53      | 77      |
+| Repairs    | 0    | 3           | 160     | 2       |
+| Holidays   | 0    | 1           | 6       | 153     |
 
+
+# Q.11: Household Tasks
+household_tasks = read.csv(file.choose(),sep=",", header=TRUE)
+data = household_tasks[,-1]
 chisq.test(household_tasks)
