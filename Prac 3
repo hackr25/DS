@@ -1,0 +1,40 @@
+# Question 1: Variance Test between Two Groups (A & B)
+data1 <- read.csv(file.choose(), header = TRUE)
+
+var.test(data1$A, data1$B, alternative = "two.sided")
+
+# Question 2: F-test for Two Groups (time_g1 & time_g2)
+pract3q2 <- read.csv(file.choose(), sep = ",", header = TRUE)
+
+var.test(pract3q2$time_g1, pract3q2$time_g2, alternative = "two.sided")
+
+# Question 3: Comparing Years of Education for Women in the UK and Germany
+data <- read.csv(file.choose(), header = TRUE)
+
+UK <- data$UK
+Germany <- data$Germany
+
+f_test <- var.test(UK, Germany)
+
+print(f_test)
+
+# Question 4: ANOVA Test for Employee Satisfaction Index across Departments
+prac3q3 <- read.csv(file.choose(), sep = ",", header = TRUE)
+
+anv <- aov(formula = satindex ~ dept, data = prac3q3)
+
+summary(anv)
+
+# Question 5: Two-Way ANOVA on Employee Satisfaction considering Experience Level
+prac3q31 <- read.csv(file.choose(), sep = ",", header = TRUE)
+
+anv1 <- aov(formula = satindex ~ dept + exp + dept * exp, data = prac3q31)
+
+summary(anv1)
+
+# Question 6: Two-Way ANOVA on Political Interest based on Gender & Education
+prac3q32 <- read.csv(file.choose(), sep = ",", header = TRUE)
+
+anv2 <- aov(formula = Political_Int ~ Gender + Education + Gender:Education, data = prac3q32)
+
+summary(anv2)
