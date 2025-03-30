@@ -1,0 +1,163 @@
+# Practical 10 - Decision Tree
+
+## Aim
+To implement Decision Tree classification on different datasets using various tree-building algorithms.
+
+### Q1) Decision Tree Classification on the Iris Dataset
+
+# Load necessary libraries
+library(rpart)
+library(rpart.plot)
+library(tree)
+library(party)
+library(caret)
+library(e1071)
+
+# Load and prepare dataset
+mydata <- data.frame(iris)
+attach(mydata)
+
+# Decision Tree using rpart
+model <- rpart(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+               data = mydata, method = "class")
+rpart.plot(model, type = 3, extra = 101, fallen.leaves = TRUE)
+
+# Decision Tree using tree package
+model1 <- tree(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+               data = mydata)
+plot(model1)
+text(model1, all = TRUE, cex = 0.6)
+
+# Decision Tree using ctree from party package
+model2 <- ctree(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+                data = mydata)
+plot(model2)
+
+# Adjusting tree depth
+model1 <- tree(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+               data = mydata, control = tree.control(nobs = nrow(mydata), mincut = 10))
+plot(model1)
+text(model1, all = TRUE, cex = 0.6)
+
+# Predicting on the dataset
+predict(model1, iris)
+
+# Limiting tree depth in ctree
+model2 <- ctree(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width,
+                data = mydata, controls = ctree_control(maxdepth = 2))
+plot(model2)
+
+# Splitting data into train and test sets
+set.seed(123)
+train_index <- createDataPartition(mydata$Species, p = 0.7, list = FALSE)
+train_data <- mydata[train_index, ]
+test_data <- mydata[-train_index, ]
+
+# Train and evaluate rpart model
+model_rpart <- rpart(Species ~ ., data = train_data, method = "class")
+pred_rpart <- predict(model_rpart, test_data, type = "class")
+conf_matrix_rpart <- confusionMatrix(pred_rpart, test_data$Species)
+print(conf_matrix_rpart)
+
+# Train and evaluate tree model
+model_tree <- tree(Species ~ ., data = train_data)
+pred_tree <- predict(model_tree, test_data, type = "class")
+conf_matrix_tree <- confusionMatrix(pred_tree, test_data$Species)
+print(conf_matrix_tree)
+
+# Train and evaluate ctree model
+model_ctree <- ctree(Species ~ ., data = train_data)
+pred_ctree <- predict(model_ctree, test_data)
+conf_matrix_ctree <- confusionMatrix(pred_ctree, test_data$Species)
+print(conf_matrix_ctree)
+
+# Comparing accuracy of models
+accuracy_results <- data.frame(Model = c("rpart", "tree", "ctree"),
+                               Accuracy = c(conf_matrix_rpart$overall["Accuracy"],
+                                            conf_matrix_tree$overall["Accuracy"],
+                                            conf_matrix_ctree$overall["Accuracy"]))
+print(accuracy_results)
+
+# Plot model accuracy
+barplot(accuracy_results$Accuracy, names.arg = accuracy_results$Model,
+        col = c("red", "blue", "green"), main = "Decision Tree Model Accuracy",
+        ylab = "Accuracy", ylim = c(0, 1))
+
+
+### Q2) Decision Tree Classification on the mtcars Dataset
+# Load necessary libraries
+library(rpart)
+library(tree)
+library(party)
+library(rpart.plot)
+library(caret)
+
+# Load and prepare dataset
+mydata <- data.frame(mtcars)
+mydata$cyl <- as.factor(mydata$cyl)
+
+# Splitting data into train and test sets
+set.seed(123)
+train_index <- createDataPartition(mydata$cyl, p = 0.7, list = FALSE)
+train_data <- mydata[train_index, ]
+test_data <- mydata[-train_index, ]
+
+# Train and evaluate rpart model
+model_rpart <- rpart(cyl ~ mpg + hp + wt + disp, data = train_data, method = "class",
+                     control = rpart.control(cp = 0.01))
+plot(model_rpart, uniform = TRUE, margin = 0.1)
+text(model_rpart, use.n = TRUE, all = TRUE, cex = 0.8)
+pred_rpart <- predict(model_rpart, test_data, type = "class")
+conf_matrix_rpart <- confusionMatrix(pred_rpart, test_data$cyl)
+print(conf_matrix_rpart)
+
+# Train and evaluate tree model
+model_tree <- tree(cyl ~ mpg + hp + wt + disp, data = train_data)
+plot(model_tree)
+text(model_tree, all = TRUE, cex = 0.6)
+pred_tree <- predict(model_tree, test_data, type = "class")
+conf_matrix_tree <- confusionMatrix(pred_tree, test_data$cyl)
+print(conf_matrix_tree)
+
+# Train and evaluate ctree model
+model_ctree <- ctree(cyl ~ mpg + hp + wt + disp, data = train_data)
+plot(model_ctree)
+pred_ctree <- predict(model_ctree, test_data)
+conf_matrix_ctree <- confusionMatrix(pred_ctree, test_data$cyl)
+print(conf_matrix_ctree)
+
+# Fine-tuning models
+model_rpart_tuned <- rpart(cyl ~ mpg + hp + wt + disp, data = train_data, method = "class",
+                           control = rpart.control(maxdepth = 3))
+pred_rpart_tuned <- predict(model_rpart_tuned, test_data, type = "class")
+conf_matrix_rpart_tuned <- confusionMatrix(pred_rpart_tuned, test_data$cyl)
+print(conf_matrix_rpart_tuned)
+
+model_tree_tuned <- tree(cyl ~ mpg + hp + wt + disp, data = train_data,
+                         control = tree.control(nobs = nrow(train_data), mincut = 5))
+pred_tree_tuned <- predict(model_tree_tuned, test_data, type = "class")
+conf_matrix_tree_tuned <- confusionMatrix(pred_tree_tuned, test_data$cyl)
+print(conf_matrix_tree_tuned)
+
+model_ctree_tuned <- ctree(cyl ~ mpg + hp + wt + disp, data = train_data,
+                           controls = ctree_control(maxdepth = 3, minsplit = 5))
+pred_ctree_tuned <- predict(model_ctree_tuned, test_data)
+conf_matrix_ctree_tuned <- confusionMatrix(pred_ctree_tuned, test_data$cyl)
+print(conf_matrix_ctree_tuned)
+
+# Comparing accuracy of models
+accuracy_results <- data.frame(Model = c("rpart", "tree", "ctree", "rpart (Tuned)", "tree (Tuned)", "ctree (Tuned)"),
+                               Accuracy = c(conf_matrix_rpart$overall["Accuracy"],
+                                            conf_matrix_tree$overall["Accuracy"],
+                                            conf_matrix_ctree$overall["Accuracy"],
+                                            conf_matrix_rpart_tuned$overall["Accuracy"],
+                                            conf_matrix_tree_tuned$overall["Accuracy"],
+                                            conf_matrix_ctree_tuned$overall["Accuracy"]))
+print(accuracy_results)
+
+# Plot model accuracy
+barplot(accuracy_results$Accuracy, names.arg = accuracy_results$Model,
+        col = rainbow(6), main = "Decision Tree Model Accuracy (mtcars)",
+        ylab = "Accuracy", ylim = c(0, 1))
+
+
