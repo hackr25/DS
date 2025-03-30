@@ -1,0 +1,33 @@
+# Reading the file (implied but not shown in document)
+# student <- read.csv("Student.csv")
+
+# Extracting first few lines
+head(student)
+
+# Checking data types
+str(student)
+
+# Getting summary of dataset
+summary(student)
+
+# Checking dimensions and listing column names
+dim(student)
+names(student)
+
+# Listing rows where total marks are more than 750
+student[student$Tmarks > 750, ]
+
+# Listing only first 2 columns where total marks are more than 750 and class is SYCS
+student[student$Tmarks > 750 & student$class == "SYCS", 1:2]
+
+# Sorting data in ascending order of total marks
+student[order(student$Tmarks), ]
+
+# Listing records where total marks are not entered
+student[is.na(student$Tmarks), ]
+
+# Plotting scatter plot (implied but not shown in document)
+# plot(student$class, student$Tmarks/10, main="Relation between Average Marks and Class")
+
+# Drawing box plot for Tmarks
+boxplot(student$Tmarks, main="Boxplot of Total Marks")
