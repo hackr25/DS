@@ -1,0 +1,72 @@
+Q1) PCA and Principal Component Regression (PCR) on iris dataset
+
+data("iris")
+head(iris)
+summary(iris)
+plot(iris$Sepal.Length, iris$Sepal.Width)
+plot(scale(iris$Sepal.Length), scale(iris$Sepal.Width))
+summary(mypr)
+plot(mypr, type="l")
+biplot(mypr, scale=0)
+str(mypr)
+mypr$x
+iris2 <- cbind(iris, mypr$x[,1:2])
+head(iris2)
+cor(iris[,-5], iris2[,6:7])
+install.packages("pls")
+library(pls)
+names(iris)
+iris$pred <- predict(pcmodel, iris, ncomp = 2)
+head(iris)
+
+
+Q2) PCA and Principal Component Regression (PCR) on mtcars dataset
+
+
+data(mtcars)  # Load dataset
+head(mtcars)  # View first few rows
+summary(mtcars)  # Summary statistics
+mypr_mtcars <- prcomp(mtcars, scale = TRUE)  # Perform PCA with scaling
+plot(mtcars$mpg, mtcars$hp, main = "Original Data")
+plot(scale(mtcars$mpg), scale(mtcars$hp), main = "Scaled Data")
+mypr_mtcars
+summary(mypr_mtcars)  # Check variance explained by each PC
+plot(mypr_mtcars, type = "l")  # Scree plot (Elbow method)
+biplot(mypr_mtcars, scale = 0)  # Visualize variable contributions
+str(mypr_mtcars)  # Check PCA structure
+mypr_mtcars$x  # Get PCA-transformed values
+mtcars2 <- cbind(mtcars, mypr_mtcars$x[, 1:2])  # Add PC1, PC2 to dataset
+head(mtcars2)  
+cor(mtcars[, -1], mtcars2[, 12:13])  # Correlation between original variables & PCs
+install.packages("pls")  # Install if not available
+library(pls)
+pcmodel_mtcars <- pcr(mpg ~ ., ncomp = 3, data = mtcars, scale = TRUE)
+mtcars$pred <- predict(pcmodel_mtcars, mtcars, ncomp = 2)
+head(mtcars)
+
+
+Q3) PCA and Principal Component Regression (PCR) on USArrests dataset
+
+
+data(USArrests)  # Load dataset
+head(USArrests)  # View first few rows
+summary(USArrests)  # Summary statistics
+mypr_usarrests <- prcomp(USArrests, scale = TRUE)  # Perform PCA with scaling
+plot(USArrests$Murder, USArrests$Assault, main = "Original Data")
+plot(scale(USArrests$Murder), scale(USArrests$Assault), main = "Scaled Data")
+mypr_usarrests  # PCA summary
+summary(mypr_usarrests)  # Variance explained by each principal component
+plot(mypr_usarrests, type = "l")  # Elbow method
+biplot(mypr_usarrests, scale = 0)  # Biplot to visualize variable contributions
+str(mypr_usarrests)  # Check PCA structure
+mypr_usarrests$x  # Get PCA-transformed values
+usarrests2 <- cbind(USArrests, mypr_usarrests$x[, 1:2])
+head(usarrests2)
+cor(USArrests, usarrests2[, 5:6])  # Correlation between original variables & principal components
+install.packages("pls")  # Install if not available
+library(pls)
+pcmodel_usarrests <- pcr(Murder ~ ., ncomp = 3, data = USArrests, scale = TRUE)
+USArrests$pred <- predict(pcmodel_usarrests, USArrests, ncomp = 2)
+head(USArrests)
+
+
