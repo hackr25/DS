@@ -1,5 +1,5 @@
 # Reading the file (implied but not shown in document)
-# student <- read.csv("Student.csv")
+student <- read.csv(file.choose(),header=TRUE,sep = ",")
 
 # Extracting first few lines
 head(student)
@@ -27,7 +27,19 @@ student[order(student$Tmarks), ]
 student[is.na(student$Tmarks), ]
 
 # Plotting scatter plot (implied but not shown in document)
-# plot(student$class, student$Tmarks/10, main="Relation between Average Marks and Class")
+stud$AvgMarks <- stud$Tmarks/6
+
+library(ggplot2)
+
+ggplot(stud,aes(x=Class,y=AvgMarks))+
+  geom_point(color="red",size=2)+
+  labs(title="ScatterPlot of Average marks and Class", x="Class",y="Average marks")+
+  theme_minimal()
 
 # Drawing box plot for Tmarks
-boxplot(student$Tmarks, main="Boxplot of Total Marks")
+library(ggplot2)
+
+ggplot(stud,aes(y=Tmarks))+
+  geom_boxplot()+
+  labs(title = "Box plot of Total Marks",y="Total Marks")+
+  theme_minimal()
