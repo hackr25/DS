@@ -26,20 +26,18 @@ student[order(student$Tmarks), ]
 # Listing records where total marks are not entered
 student[is.na(student$Tmarks), ]
 
-# Plotting scatter plot (implied but not shown in document)
-stud$AvgMarks <- stud$Tmarks/6
+# Calculating average marks
+student$AvgMarks <- student$Tmarks/6
 
+# For the scatter plot, use 'student' instead of 'stud'
 library(ggplot2)
-
-ggplot(stud,aes(x=Class,y=AvgMarks))+
-  geom_point(color="red",size=2)+
-  labs(title="ScatterPlot of Average marks and Class", x="Class",y="Average marks")+
+ggplot(student, aes(x=class, y=AvgMarks)) +
+  geom_point(color="red", size=2) +
+  labs(title="ScatterPlot of Average marks and Class", x="Class", y="Average marks") +
   theme_minimal()
 
-# Drawing box plot for Tmarks
-library(ggplot2)
-
-ggplot(stud,aes(y=Tmarks))+
-  geom_boxplot()+
-  labs(title = "Box plot of Total Marks",y="Total Marks")+
+# For the box plot, use 'student' instead of 'stud'
+ggplot(student, aes(y=Tmarks)) +
+  geom_boxplot() +
+  labs(title = "Box plot of Total Marks", y="Total Marks") +
   theme_minimal()
