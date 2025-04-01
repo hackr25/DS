@@ -43,11 +43,15 @@ library(pls)
 # Names of the columns in iris dataset
 names(iris)
 
+
+# Convert Species to numeric labels (1, 2, 3)
+iris$Species <- as.numeric(iris$Species)  # Setosa = 1, Versicolor = 2, Virginica = 3
+
 # Fit a PCA-based model
-pcmodel <- pcr(Species ~ ., data = iris, scale = TRUE, validation = "CV")
+pcmodel <- pcr(SpeciesNum ~ ., data = iris[, -5], scale = TRUE, validation = "CV")
 
 # Predict using the PCA model with 2 components
-iris$pred <- predict(pcmodel, iris, ncomp = 2)
+iris$pred <- predict(pcmodel, ncomp = 2)
 head(iris)
 
 
