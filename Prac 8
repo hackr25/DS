@@ -1,21 +1,52 @@
 Q1) PCA and Principal Component Regression (PCR) on iris dataset
 
+# Load the iris dataset
 data("iris")
 head(iris)
 summary(iris)
+
+# Scatter plot of Sepal.Length vs Sepal.Width
 plot(iris$Sepal.Length, iris$Sepal.Width)
+
+# Scatter plot with standardized values
 plot(scale(iris$Sepal.Length), scale(iris$Sepal.Width))
+
+# Perform PCA on the numeric columns (excluding the Species column)
+mypr <- prcomp(iris[, 1:4], center = TRUE, scale. = TRUE)
+
+# Summary of PCA results
 summary(mypr)
-plot(mypr, type="l")
-biplot(mypr, scale=0)
+
+# Plot PCA variance
+plot(mypr, type = "l")
+
+# Biplot of PCA
+biplot(mypr, scale = 0)
+
+# Structure of the PCA object
 str(mypr)
+
+# Principal component scores
 mypr$x
+
+# Combine original iris dataset with first two principal components
 iris2 <- cbind(iris, mypr$x[,1:2])
 head(iris2)
-cor(iris[,-5], iris2[,6:7])
+
+# Correlation between original numeric features and the first two principal components
+cor(iris[, -5], iris2[, 6:7])
+
+# Install and load pls package for Partial Least Squares Regression
 install.packages("pls")
 library(pls)
+
+# Names of the columns in iris dataset
 names(iris)
+
+# Fit a PCA-based model
+pcmodel <- pcr(Species ~ ., data = iris, scale = TRUE, validation = "CV")
+
+# Predict using the PCA model with 2 components
 iris$pred <- predict(pcmodel, iris, ncomp = 2)
 head(iris)
 
